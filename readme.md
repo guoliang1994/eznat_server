@@ -10,18 +10,19 @@
     2.配置网站指向eznat/public目录
     3.重启你的web服务
     4.登录后端管理端口映射
+    5.【重要】使用root权限运行网站。
 # 客户端使用说明
      1.git clone https://github.com/guoliang1994/eznat.git
      2.cd eznat/eznat
      3.windows 使用client_fro_win.bat 启动，hide_run.vbs 用作计划任务，开机后台运行eznat
      4.linux 使用 client_for_linux.sh 启动
 # 简介
-## eznat优势
-    1.使用超级简单，使用超级简单，使用超级简单。
+## eznat优势 使用超级简单，使用超级简单
+    1.web界面管理服务端【启动，停止，重启，查看状态等】。
     2.客户端下载运行即可，无需任何配置。
-    3.支持多端口映射，web界面管理迎神。
-    4.支持多台设备穿透，web界面管理设备。
-    5.端口流量转换统计，web界面查看流量。
+    3.支持多端口映射。
+    4.支持多台设备穿透。
+    5.端口流量转换统计。
     6.开源免费，纯php开发，可供学习参考。
 ## 鸣谢
     laravel 框架
