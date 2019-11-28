@@ -27,6 +27,9 @@ class Client extends WorkerWithCallback implements WorkerInterface
             Timer::add(3,function() use ($conf){
                 ChannelClient::publish("IN_REGISTER", $conf['channel']);
             });
+            Timer::add(2,function(){
+                file_put_contents("isRunning", time());
+            });
             ChannelClient::on("OUT_CONNECT" .$conf['channel'], function ($outConnection){
                 $channel = $outConnection->channel;
                 self::$localServer[$channel] = new LinkLocalServer($outConnection->mapLocalIp.":".$outConnection->mapLocalPort);
