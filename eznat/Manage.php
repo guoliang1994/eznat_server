@@ -3,7 +3,7 @@ namespace core;
 
 class Manage
 {
-    private static $phpPath =  __DIR__."../runenv/linux_php/bin/php";
+    private static $phpPath =  __DIR__."/../runenv/linux_php/bin/php";
     public static function start()
     {
         $scriptFile = __DIR__ . "/server.php";

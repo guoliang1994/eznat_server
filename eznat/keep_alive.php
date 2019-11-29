@@ -1,8 +1,22 @@
 <?php
-$time = file_get_contents('isRunning');
-
-if (time() - $time > 5) {
-    echo "重启";
-    exec("..\\runenv\\win_php\\php.exe client.php", $out);
-    var_dump($out);
+require __DIR__ . "/../vendor/autoload.php";
+use core\conf\Conf;
+$conf = (new Conf())->conf;
+$times = 0;
+while ($times < 5 * 60) {
+    $time = file_get_contents('isRunning');
+    if (time() - $time > $conf['keep_alive']) {
+        echo "重启";
+        if( DIRECTORY_SEPARATOR=='\\') {
+            exec("..\\runenv\\win_php\\php.exe client.php", $out);
+            var_dump($out);
+        } else {
+            exec("../runenv/win_php/php client.php start -d", $out);
+            var_dump($out);
+        }
+    }
+    echo "循环{$times}";
+    sleep($conf['keep_alive']);
+    $times += 10;
 }
+die();
