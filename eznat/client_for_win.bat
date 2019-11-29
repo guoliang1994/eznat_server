@@ -1,2 +1,1 @@
-..\\runenv\\win_php\\php.exe keep_alive.php
-pause
+..\\runenv\\win_php\\php.exe client.php
