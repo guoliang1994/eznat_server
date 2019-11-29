@@ -11,17 +11,16 @@
     2.配置网站指向eznat/public目录
     3.重启你的web服务
     4.登录后端管理端口映射
-# 常见问题
-    1.未使用正确用户执行启动，造成端口一直被占用，就算更改为www也无法启动进程
-    答：ps -ef | grep php 查看启动的worker，全部停止后即可。
-        fuser -k -n tcp port 强制关闭占用目标端口的程序。
-    2.后台登录账号：admin，密码为123456
 # 客户端使用说明
      1.git clone https://github.com/guoliang1994/eznat.git
      2.cd eznat/eznat
      3.windows 新增计划任务【【循环】】运行hide_run.vbs
      4.linux 新增计划任务每分钟 nohup 运行 keep_alive.php
-# 简介
+ # 服务端常见问题
+     1.未使用正确用户执行启动，造成端口一直被占用，就算更改为www也无法启动进程
+     答：ps -ef | grep php 查看启动的worker，全部停止后即可。
+         fuser -k -n tcp port 强制关闭占用目标端口的程序。
+     2.后台登录账号：admin，密码为123456
 ## eznat优势 使用超级简单，使用超级简单
     1.web界面管理服务端【启动，停止，重启，查看状态等】。
     2.客户端下载运行即可，无需任何配置。
@@ -33,7 +32,13 @@
     laravel 框架
     workerman https://github.com/walkor/Workerman.git
     vue-element-admin https://github.com/PanJiaChen/vue-element-admin.git
+# 沟通交流
+    QQ群：946192373
 ## 捐赠支持
-    这是支付宝
-    这是微信
-    
+微信![微信](https://images.gitee.com/uploads/images/2019/1129/175939_8545619a_1026697.png "微信.png")
+支付宝![支付宝](https://images.gitee.com/uploads/images/2019/1129/180417_10104e83_1026697.png "支付宝.png")
+# web端截图
+![输入图片说明](https://images.gitee.com/uploads/images/2019/1129/180852_88752dc8_1026697.png "登录界面.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/1129/180907_ce6226d5_1026697.png "设备管理界面.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/1129/180923_bf4588d5_1026697.png "用户管理界面.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/1129/180943_42f0c869_1026697.png "管理端界面.png")
