@@ -2,7 +2,6 @@
 require __DIR__ . "/../vendor/autoload.php";
 
 use core\classes\Client;
-use core\classes\Server;
 use core\conf\Conf;
 
 global $conf;

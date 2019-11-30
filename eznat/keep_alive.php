@@ -17,6 +17,6 @@ while ($times < 5 * 60) {
     }
     echo "循环{$times}";
     sleep($conf['keep_alive']);
-    $times += 10;
+    $times += $conf['keep_alive'];
 }
 die();
