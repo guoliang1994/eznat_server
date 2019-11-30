@@ -5,17 +5,6 @@
     2.客户端只测试了windows和linux
     3.代码中包含windows和linux的运行环境，不需要自己下载和配置php，肥肠方便呢。
     4.服务端的web服务需要自行配置。
-## 服务端使用说明
-    1.git clone https://github.com/guoliang1994/eznat.git
-    2.chown www:www eznat【更改目录的所有者，我的是www用户】
-    2.配置网站指向eznat/public目录
-    3.重启你的web服务
-    4.登录后端管理端口映射
-## 客户端使用说明
-     1.git clone https://github.com/guoliang1994/eznat.git
-     2.cd eznat/eznat
-     3.windows 新增计划任务【【循环】】运行hide_run.vbs
-     4.linux 新增计划任务每分钟 nohup 运行 keep_alive.php
 [详细使用文档](https://gitee.com/FYDEV/eznat/wikis/pages)
  ## 服务端常见问题
      1.未使用正确用户执行启动，造成端口一直被占用，就算更改为www也无法启动进程
