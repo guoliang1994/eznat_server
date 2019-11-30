@@ -11,11 +11,13 @@
     2.配置网站指向eznat/public目录
     3.重启你的web服务
     4.登录后端管理端口映射
+[文档](https://gitee.com/FYDEV/eznat.wiki.git)
 ## 客户端使用说明
      1.git clone https://github.com/guoliang1994/eznat.git
      2.cd eznat/eznat
      3.windows 新增计划任务【【循环】】运行hide_run.vbs
      4.linux 新增计划任务每分钟 nohup 运行 keep_alive.php
+[文档](https://gitee.com/FYDEV/eznat.wiki.git)
  ## 服务端常见问题
      1.未使用正确用户执行启动，造成端口一直被占用，就算更改为www也无法启动进程
      答：ps -ef | grep php 查看启动的worker，全部停止后即可。
