@@ -2,7 +2,6 @@
 require __DIR__ . "/../vendor/autoload.php";
 
 use Workerman\Worker;
-use Workerman\WebServer;
 use Channel\Server as ChannelServer;
 use core\classes\Server;
 use core\conf\Conf;

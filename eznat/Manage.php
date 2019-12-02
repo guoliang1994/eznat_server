@@ -3,13 +3,13 @@ namespace core;
 
 class Manage
 {
-    private static $phpPath =  __DIR__."/../runenv/linux_php/bin/php";
+    private static $phpPath =  "php";
     public static function start()
     {
         $scriptFile = __DIR__ . "/server.php";
         $php = self::$phpPath;
         exec("{$php} {$scriptFile} start -d", $out);
-        return $out;
+        return $php;
     }
 
     public static function restart()

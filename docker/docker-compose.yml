@@ -1,0 +1,107 @@
+version: '3'
+services:
+
+  ### Nginx container #########################################
+
+  nginx:
+      image: nginx:alpine
+      ports:
+        - "${HTTP_PORT}:80"
+        - "${HTTPS_PORT}:443"
+      volumes:
+        - ${PROJECT_FOLDER}:/etc/nginx/html/:rw
+        - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./nginx/config/conf.d:/etc/nginx/conf.d:ro
+        - ./nginx/log:/var/log/nginx:rw
+      restart: always
+      privileged: true
+      networks:
+        - net-php
+
+  ### PHP container #########################################
+
+  php:
+      build:
+        context: ./build/php
+        args:
+          TIME_ZONE: ${GLOBAL_TIME_ZONE}
+          CHANGE_SOURCE: ${GLOBAL_CHANGE_SOURCE}
+      command:
+        - /bin/bash
+        - -c
+        - |
+          composer config -g repo.packagist composer https://packagist.phpcomposer.com ;\
+          composer install -d /etc/nginx/html/eznat ;\
+          php-fpm ;\
+      ports:
+        - "9918-9979:9918-9979"
+      volumes:
+        - ${PROJECT_FOLDER}:/etc/nginx/html:rw
+        - ./php/config/php.ini:/usr/local/etc/php/php.ini:ro
+        - ./php/config/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+        - ./php/log:/var/log:rw
+      restart: always
+      privileged: true
+      networks:
+        - net-php
+  node:
+      build:
+        context: ./build/node
+      working_dir: /home/eznat/eznat_web
+      volumes:
+        - ${PROJECT_FOLDER}:/home
+      stdin_open: true
+      tty: true
+      privileged: true
+      command: ["/bin/bash", "-c", "cnpm install ;\ cnpm run build:prod ;\ "]
+
+    ### Mysql container #########################################
+
+#  mysql:
+#      image: mysql:5.7
+#      ports:
+#        - "${MYSQL_PORT}:3306"
+#      volumes:
+#        - ./mysql/data:/var/lib/mysql:rw
+#        - ./mysql/config/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:ro
+#        - ./mysql/log:/var/log/mysql:rw
+#      restart: always
+#      privileged: true
+#      environment:
+#        MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+#      networks:
+#        - net-mysql
+
+  ### Redis container #########################################
+
+#  redis:
+#      image: redis:latest
+#      ports:
+#        - "${REDIS_PORT}:6379"
+#      volumes:
+#        - ./redis/config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+#        - ./redis/log/redis.log:/var/log/redis/redis.log:rw
+#      restart: always
+#      privileged: true
+#      networks:
+#        - net-redis
+
+    ### Tools container #########################################
+#  tools:
+#      build:
+#        context: ./build/tools
+#        args:
+#          TIME_ZONE: ${GLOBAL_TIME_ZONE}
+#          CHANGE_SOURCE: ${GLOBAL_CHANGE_SOURCE}
+#      volumes:
+#        - ./tools/start.sh:/home/start.sh:rw
+#        - ./tools/backup:/backup:rw
+#        - ./tools/cron.d:/etc/cron.d:rw
+#      restart: always
+#      privileged: true
+#      networks:
+#        - net-php
+#        - net-mysql
+#        - net-redis
+networks:
+  net-php:
