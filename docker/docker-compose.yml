@@ -31,10 +31,11 @@ services:
         - -c
         - |
           composer config -g repo.packagist composer https://packagist.phpcomposer.com ;\
+          chown www-data:www-data /etc/nginx/html/eznat -R;\
           composer install -d /etc/nginx/html/eznat ;\
           php-fpm ;\
       ports:
-        - "9918-9979:9918-9979"
+        - "9918-9978:9918-9978"
       volumes:
         - ${PROJECT_FOLDER}:/etc/nginx/html:rw
         - ./php/config/php.ini:/usr/local/etc/php/php.ini:ro
@@ -53,7 +54,7 @@ services:
       stdin_open: true
       tty: true
       privileged: true
-      command: ["/bin/bash", "-c", "cnpm install ;\ cnpm run build:prod ;\ "]
+      # command: ["/bin/bash", "-c", "npm install && npm run build:prod ;\ "]
 
     ### Mysql container #########################################
 
