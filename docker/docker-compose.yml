@@ -37,7 +37,7 @@ services:
           composer install -d /etc/nginx/html/eznat ;\
           php-fpm ;\
       ports:
-        - "9918-9978:9918-9978"
+        - ${OPEN_PORT}
       volumes:
         - ${PROJECT_FOLDER}:/etc/nginx/html:rw
         - ./php/config/php.ini:/usr/local/etc/php/php.ini:ro
