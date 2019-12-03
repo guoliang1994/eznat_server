@@ -1,11 +1,35 @@
-## eznat
-简单快捷的把内网映射到外网
-## 重要说明,兄弟别光fork代码，给个star先。
+# eznat
+史上最简单的内网穿透软件，部署简单，使用简单，传输稳定。
+### 重要说明,兄弟别光fork代码，给个star先。
     1.服务端暂时只支持部署到linux系统。
     2.客户端只测试了windows和linux
-    3.代码中包含windows和linux的运行环境，不需要自己下载和配置php，肥肠方便呢。
-    4.服务端的web服务需要自行配置。
-[详细使用文档](https://gitee.com/FYDEV/eznat/wikis/pages)
+### 服务端使用
+    1. 安装docker
+        yum install -y yum-utils device-mapper-persistent-data lvm2
+        yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+        yum install docker-ce
+        yum install docker-compose
+        如果遇到错误：请查看下面的文档
+        [docker安装文档](https://gitee.com/FYDEV/eznat/wikis/pages)
+    1. git clone https://gitee.com/FYDEV/eznat.git
+    1. 修改前端请求接口配置 【待编写】
+    2. 修改服务器端口配置 【待编写】
+    3. 修改通道端口配置 【待编写】
+    1. cd eznat/docker 
+    1. cp .env.example .evn && docker-composer up 这一步可能消耗的时间会有点长，时间随缘
+    1. 耐心等待启动....
+    1. 访问
+   
+### 客户端使用说明
+    git clone https://gitee.com/FYDEV/eznat.git
+    cd eznat/runenv
+    win_install.bat
+    等待安装扩展包
+    修改配置 eznat/eznat/conf/Conf.php 【待编写】
+    测试是否穿透成功
+    运行test_win.bat
+    
+    长期运行
  ## 服务端常见问题
      1.未使用正确用户执行启动，造成端口一直被占用，就算更改为www也无法启动进程
      答：ps -ef | grep php 查看启动的worker，全部停止后即可。
