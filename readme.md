@@ -1,7 +1,10 @@
 # EZNAT
 史上最简单的内网穿透软件，部署简单，使用简单，传输稳定。
- 
+
+**docker-compose 一键启动服务端。** 
+
 **兄弟别只顾着fork代码，给个star先。**
+
 ### 如何使用
 [点击查看安装文档](https://gitee.com/FYDEV/eznat/wikis/pages)
 
