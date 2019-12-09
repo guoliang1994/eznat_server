@@ -1,6 +1,12 @@
 server{
-    listen 443;
+    listen 443 ssl;
     server_name  localhost;
+    ssl_certificate https.pem;
+    ssl_certificate_key https.key;
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
 
     #charset koi8-r;
 
@@ -31,15 +37,6 @@ server{
     location ~ \.php {
         fastcgi_pass   php:9000;
         fastcgi_index  index.php;
-
-        ssl on;
-        ssl_certificate https.pem;
-        ssl_certificate_key https.key;
-        ssl_session_cache shared:SSL:1m;
-        ssl_session_timeout  10m;
-        ssl_ciphers HIGH:!aNULL:!MD5;
-        ssl_prefer_server_ciphers on;
-
         # for path info
         fastcgi_split_path_info ^(.+?\.php)(/.*)$;
         set $path_info $fastcgi_path_info;

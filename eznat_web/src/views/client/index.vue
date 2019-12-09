@@ -72,7 +72,7 @@
           <el-input v-model="form.type" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="隧道" :label-width="formLabelWidth">
-          <el-input v-model="form.channel" autocomplete="off"></el-input>
+        {{ form.channel }}
         </el-form-item>
          <el-form-item label="描述" :label-width="formLabelWidth">
           <el-input v-model="form.description" autocomplete="off"></el-input>

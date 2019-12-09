@@ -11,7 +11,7 @@ while ($times < 5 * 60) {
             exec("..\\runenv\\win_php\\php.exe client.php", $out);
             var_dump($out);
         } else {
-            exec("../runenv/win_php/php client.php start -d", $out);
+            exec("php client.php start -d", $out);
             var_dump($out);
         }
     }

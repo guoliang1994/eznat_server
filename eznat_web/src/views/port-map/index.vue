@@ -1,8 +1,13 @@
 <style lang='less'>
 .structure {
+  path: 1;
   margin: 20px;
-  > :nth-child(2) {
+  .server-status{
+    path: 1-2;
+    background: black;
     margin-top: 20px;
+    min-height: 80px;
+    color: #ffffff;
   }
 }
 </style>
@@ -22,6 +27,18 @@
       <!-- <el-button size="mini" @click="reload()" type="warning">重载服务</el-button> -->
       <el-button size="mini" @click="status()">查看状态</el-button>
     </div>
+
+    <div
+      class="server-status"
+      v-loading="loading"
+      element-loading-text="正在加载服务端运行状态..."
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.7)">
+      <pre>
+        {{ serverStatus }}
+      </pre>
+    </div>
+
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -44,10 +61,10 @@
       <el-table-column label="本地端口">
         <template slot-scope="scope">{{ scope.row.local_port }}</template>
       </el-table-column>
-      <el-table-column label="隧道">
-        <template slot-scope="scope">{{ scope.row.channel }}</template>
+      <el-table-column label="状态">
+        <template slot-scope="scope">运行中</template>
       </el-table-column>
-      <el-table-column label="操作" width="300" right>
+      <el-table-column label="操作" width="250" right>
         <template slot-scope="scope">
           <el-popover placement="right" width="auto" trigger="click" v-model="scope.row.visible">
             <p>警告：删除后将无法恢复！</p>
@@ -67,6 +84,20 @@
             icon="el-icon-edit-outline"
             @click="openCreateView(scope.row, 'update')"
           >编辑</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-video-play"
+            v-if="is_on==1"
+            @click="openCreateView(scope.row, 'update')"
+          >启动</el-button>
+          <el-button
+            size="mini"
+            v-if="is_on==0"
+            type="warning"
+            icon="el-icon-video-pause"
+            @click="openCreateView(scope.row, 'update')"
+          >停止</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,8 +119,15 @@
         <el-form-item label="描述" :label-width="formLabelWidth">
           <el-input v-model="form.description" autocomplete="off"></el-input>
         </el-form-item>
-         <el-form-item label="通道" :label-width="formLabelWidth">
-          <el-input v-model="form.channel" autocomplete="off"></el-input>
+         <el-form-item label="客户端" :label-width="formLabelWidth">
+          <el-select v-model="form.channel" placeholder="请选择">
+            <el-option
+              v-for="item in client_list"
+              :key="item.channel"
+              :label="item.name"
+              :value="item.channel">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -113,14 +151,17 @@
 
 <script>
 import api from '@/api/port-map'
+import client from '@/api/client'
 import serviceManage from '@/api/server-manage'
 import tableData from '@/mixins/tableData'
+import { setInterval } from 'timers';
 export default {
   mixins: [tableData],
   data() {
     return {
       api: api,
       tableData: [],
+      is_on: 0,
       roles: [],
       form: {
         id: '',
@@ -131,26 +172,49 @@ export default {
         description: '无',
         channel: ''
       },
+      serverStatus: "",
+      loading: true,
+      client_list: []
     }
   },
   created() {
-   
+    this.status()
+    let that = this
+    client.retrieve().then(res => {
+      that.client_list = res.data
+    })
   },
   methods: {
     stop() {
-      serviceManage.stop();
+      let that = this
+      serviceManage.stop().then(res => {
+        that.status()
+      })
     },
     start() {
-      serviceManage.start();
+      let that = this
+      serviceManage.start().then(res => {
+        that.status()
+      })
     },
     restart() {
-      serviceManage.restart();
+      let that = this
+      serviceManage.restart().then(res => {
+         that.status()
+      })
     },
     reload() {
-      serviceManage.reload();
+      let that = this
+      serviceManage.reload()
+      that.status()
     },
     status() {
-      serviceManage.status();
+      let that = this
+      this.loading = true
+      serviceManage.status().then(res => {
+        that.serverStatus = res.out
+        that.loading = false
+      })
     },
     openCreateView(row, type) {
       this.dialogFormVisible = true
