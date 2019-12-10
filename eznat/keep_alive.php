@@ -3,7 +3,7 @@ require __DIR__ . "/../vendor/autoload.php";
 use core\conf\Conf;
 $conf = (new Conf())->conf;
 $times = 0;
-while ($times < 5 * 60) {
+while ($times < 60) {
     $time = file_get_contents('isRunning');
     if (time() - $time > $conf['keep_alive']) {
         echo "重启";

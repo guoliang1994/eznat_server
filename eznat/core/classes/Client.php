@@ -29,7 +29,7 @@ class Client extends WorkerWithCallback implements WorkerInterface
             });
             
             file_put_contents("isRunning", time());
-            Timer::add($conf['keep_alive'], function(){
+            Timer::add(ceil($conf['keep_alive']/2), function(){
                 file_put_contents("isRunning", time());
             });
             ChannelClient::on("OUT_CONNECT" .$conf['channel'], function ($outConnection){
