@@ -21,7 +21,7 @@ class GuardController extends Controller
         $data = User::where(['account' => $account, 'password' => $password])->first();
         if (!empty($data)) {
             $token = md5(uniqid());
-            \Cache::put($token, $data, 1440);
+            \Cache::put($token, $data->toArray(), 1440);
             $response = ['code' => 20000,  'data' => ['token' =>$token], 'msg' => '登录成功', 'user_info' => \Cache::get($token)];
             return $response;
         } else {

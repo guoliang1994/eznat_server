@@ -18,7 +18,10 @@ class PortMapController extends Controller
     {
         $userInfo = \Cache::get($request->token, 'default');
         $portMapDao = new PortMapDao();
-        $data = $portMapDao->retrieve(["client.user_id" => $userInfo['id']]);
+        $where = [
+            ['client.user_id', '=', $userInfo['id']]
+        ];
+        $data = $portMapDao->retrieve($where);
         return ['code' => 20000, 'data' => $data];
     }
     public function update(Request $request)
