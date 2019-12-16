@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::middleware("cross_domain")->prefix('port_map')->group(function () {
+Route::middleware(['cross_domain', 'check_login'])->prefix('port_map')->group(function () {
     Route::any('create', 'PortMapController@create');
     Route::any('delete', 'PortMapController@delete');
     Route::any('read', 'PortMapController@read');
@@ -24,7 +24,7 @@ Route::middleware("cross_domain")->prefix('port_map')->group(function () {
     Route::any('retrieve', 'PortMapController@retrieve');
 });
 
-Route::middleware("cross_domain")->prefix('client')->group(function () {
+Route::middleware(['cross_domain', 'check_login'])->prefix('client')->group(function () {
     Route::any('create', 'ClientController@create');
     Route::any('delete', 'ClientController@delete');
     Route::any('read', 'ClientController@read');
@@ -32,7 +32,7 @@ Route::middleware("cross_domain")->prefix('client')->group(function () {
     Route::any('retrieve', 'ClientController@retrieve');
 });
 
-Route::middleware("cross_domain")->prefix('user')->group(function () {
+Route::middleware(['cross_domain', 'check_login'])->prefix('user')->group(function () {
     Route::any('create', 'UserController@create');
     Route::any('delete', 'UserController@delete');
     Route::any('read', 'UserController@read');
@@ -40,13 +40,13 @@ Route::middleware("cross_domain")->prefix('user')->group(function () {
     Route::any('retrieve', 'UserController@retrieve');
 });
 
-Route::middleware("cross_domain")->prefix('guard')->group(function () {
+Route::middleware(['cross_domain'])->prefix('guard')->group(function () {
     Route::any('login', 'GuardController@login');
     Route::any('logout', 'GuardController@logout');
     Route::any('getUserInfo', 'GuardController@getUserInfo');
 });
 
-Route::middleware("cross_domain")->prefix('server_manage')->group(function () {
+Route::middleware(['cross_domain', 'check_login'])->prefix('server_manage')->group(function () {
     Route::any('stop', 'ServerManage@stop');
     Route::any('start', 'ServerManage@start');
     Route::any('status', 'ServerManage@status');

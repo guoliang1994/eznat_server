@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use core\Manage;
+
 class ServerManage extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('check_login');
-    }
-
     public function stop()
     {
         $out = Manage::stop();

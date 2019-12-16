@@ -4,10 +4,11 @@
   margin: 20px;
   .server-status{
     path: 1-2;
-    background: black;
-    margin-top: 20px;
-    min-height: 80px;
-    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2em;
+    background: #fff;
+    margin: 20px 0;
+    color: red;
   }
 }
 </style>
@@ -33,10 +34,8 @@
       v-loading="loading"
       element-loading-text="正在加载服务端运行状态..."
       element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.7)">
-      <pre>
-        {{ serverStatus }}
-      </pre>
+      element-loading-background="rgba(255, 255, 255, 0.7)">
+      服务器状态：{{ serverStatus}}
     </div>
 
     <el-table
@@ -49,6 +48,9 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" sortable width="100"></el-table-column>
+      <el-table-column label="客户端">
+        <template slot-scope="scope">{{ scope.row.client }}</template>
+      </el-table-column>
       <el-table-column label="名称">
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
@@ -61,10 +63,7 @@
       <el-table-column label="本地端口">
         <template slot-scope="scope">{{ scope.row.local_port }}</template>
       </el-table-column>
-      <el-table-column label="状态">
-        <template slot-scope="scope">运行中</template>
-      </el-table-column>
-      <el-table-column label="操作" width="250" right>
+      <el-table-column label="操作" width="200" right>
         <template slot-scope="scope">
           <el-popover placement="right" width="auto" trigger="click" v-model="scope.row.visible">
             <p>警告：删除后将无法恢复！</p>
@@ -91,13 +90,6 @@
             v-if="is_on==1"
             @click="openCreateView(scope.row, 'update')"
           >启动</el-button>
-          <el-button
-            size="mini"
-            v-if="is_on==0"
-            type="warning"
-            icon="el-icon-video-pause"
-            @click="openCreateView(scope.row, 'update')"
-          >停止</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -172,7 +164,7 @@ export default {
         description: '无',
         channel: ''
       },
-      serverStatus: "",
+      serverStatus: "正在获取中....",
       loading: true,
       client_list: []
     }
@@ -212,7 +204,7 @@ export default {
       let that = this
       this.loading = true
       serviceManage.status().then(res => {
-        that.serverStatus = res.out
+        that.serverStatus = res.out.length > 2 ? "运行中" : "已经停止";
         that.loading = false
       })
     },

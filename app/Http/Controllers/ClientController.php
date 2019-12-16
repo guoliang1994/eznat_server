@@ -2,21 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
+use App\Model\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('check_login');
-    }
-
     /**
      * Show the application dashboard.
      *

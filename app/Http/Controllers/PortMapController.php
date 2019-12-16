@@ -2,23 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\PortMap;
+use App\Model\PortMapDao;
+use App\Model\PortMap;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\Catch_;
 
 class PortMapController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('check_login');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -28,8 +17,9 @@ class PortMapController extends Controller
     public function retrieve(Request $request)
     {
         $userInfo = \Cache::get($request->token, 'default');
-        $model =  PortMap::where(["user_id" => $userInfo['id']])->get();
-        return ['code' => 20000, 'data' => $model];
+        $portMapDao = new PortMapDao();
+        $data = $portMapDao->retrieve(["client.user_id" => $userInfo['id']]);
+        return ['code' => 20000, 'data' => $data];
     }
     public function update(Request $request)
     {
@@ -39,7 +29,6 @@ class PortMapController extends Controller
         $portMap->local_ip = $request->input('local_ip');
         $portMap->local_port =  $request->input('local_port');
         $portMap->description =  $request->input('description');
-        $portMap->channel =  $request->input('channel');
         $portMap->save();
         return ['code' => 20000, 'msg' => '更新成功'];
     }
