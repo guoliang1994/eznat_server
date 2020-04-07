@@ -1,0 +1,30 @@
+<?php
+require_once 'init_laravel_orm.php';
+
+use Workerman\Worker;
+use Channel\Server as ChannelServer;
+
+use core\Manage;
+use core\classes\Server;
+
+use App\Model\PortMap;
+use App\Model\Client;
+
+Client::where('id', '>', 0)->update(['is_online' => 0]); # 重置客户端状态为下线
+PortMap::where('id', '>', 0)->update(['is_online' => 0]); # 重置服务端状态为下线
+
+$data = PortMap::all();
+foreach ($data as $port) {
+    if ($port['remote_port'] == 80 || $port['remote_port'] == 443) {
+        continue;
+    }
+    Manage::generateScriptFile($port);
+}
+
+$web = new Server("tcp://0.0.0.0:80" );
+$httpsWeb = new Server("tcp://0.0.0.0:443" );
+$web->name = "web";
+$httpsWeb->name = "https_web";
+$channelServer = new ChannelServer("0.0.0.0", CHANNEL_PORT);
+
+Worker::runAll();
