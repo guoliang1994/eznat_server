@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-use Illuminate\Support\Facades\DB;
-
 class WebMap extends Map
 {
     protected $table = 'web_map';

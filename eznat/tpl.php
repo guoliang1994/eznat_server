@@ -7,7 +7,7 @@ use App\Model\PortMap;
 
 global $workerListenPort;
 $scriptName =  explode('_', __FILE__);
-$workerListenPort = str_replace('server/', '', $scriptName[2]);
+$workerListenPort = str_replace('server/', '', $scriptName[3]);
 new Server("tcp://0.0.0.0:" . $workerListenPort);
 if ($argv[1] == 'start' || $argv[1] == 'restart') {
     PortMap::where('remote_port', '=', $workerListenPort)->update(['is_online' => 1]);

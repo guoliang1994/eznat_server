@@ -7,9 +7,15 @@
         <span class="description">Shared publicly - 7:30 PM today</span>
       </div>
       <p>
-        内网穿透调试有什么优越性？ <br />
-        修改代码无需上传，本地即可为测试服。大大节约测试成本，和代码上传时间。
-        组间协作更方便。
+        在windows端，采用docker为服务容器，配合内网穿透和xdebug，有多爽？<br />
+        1.代码修改无需上传，保存即可，因为docker和宿主机采用目录映射。<br />
+        2.通过内网穿透，可以断点调试所有的第三方回调，不再需要file_put_contents存储第三方回调参数，不用猜测第三方是否回调。<br />
+        3.通过内网穿透，使用本机作为服务器提供服务到外网。<br />
+        4.内网穿透能让你的计算机就像在公网上一样，任何人都能访问。<br />
+        5.远程桌面穿透<br />
+        6.数据库穿透<br />
+        7.网站穿透<br />
+        8.你想穿透的一切...<br />
       </p>
       <ul class="list-inline">
         <li>
@@ -33,7 +39,8 @@
         <span class="description">Sent you a message - yesterday</span>
       </div>
       <p>
-        Cli模式下如何使用Xdebug调试
+        Cli模式下如何使用Xdebug调试? <br />
+        <a style="color:blue;" href="https://www.jetbrains.com/help/phpstorm/2019.2/debugging-a-php-cli-script.html?utm_campaign=PS&utm_content=2019.2&utm_medium=link&utm_source=product">Jetbrain Xdebug参考</a>
       </p>
       <ul class="list-inline">
         <li>

@@ -1,78 +1,38 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# EZNAT
+史上最简单的内网穿透软件，部署简单，使用简单，传输稳定。
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+**docker-compose 一键启动服务端。** 
 
-## About Laravel
+**兄弟别只顾着fork代码，给个star先。**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 如何使用
+[点击查看安装文档](https://gitee.com/FYDEV/eznat_server/wikis/pages)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    1.服务端支持linux，windows
+    2.客户端理论上支持所有可以运行PHP的操作系统，目前只测试了windows和linux
+    
+## eznat优势 使用超级简单，使用超级简单
+    1.web界面管理服务端【启动，停止，重启，查看状态等】。
+    2.客户端只需要配置一个参数（data_bus）。
+    3.支持多端口映射。
+    4.支持多台设备穿透。
+    5.端口流量转换统计。【未开发】
+    6.开源免费，纯php开发，可供学习参考。
+    7.采用80和443端口转发所有网站。
+    8.支持多用户，和好基友一起使用吧~
+## 沟通交流
+    QQ群：946192373
+## 捐赠支持
+![支付宝](http://eznat.istiny.cc/uploads/zfb.png "支付宝.png")
+![支付宝](http://eznat.istiny.cc/uploads/wx.png "微信.png")
+## 后端web管理界面截图
+![登录界面](http://eznat.istiny.cc/uploads/d0.png "登录界面.png")
+![个人简介](http://eznat.istiny.cc/uploads/d1.png "个人简介.png")
+![输入图片说明](http://eznat.istiny.cc/uploads/d2.png "设备管理界面.png")
+![输入图片说明](http://eznat.istiny.cc/uploads/d3.png "用户管理界面.png")
+![输入图片说明](http://eznat.istiny.cc/uploads/d4.png "管理端界面.png")
+![输入图片说明](http://eznat.istiny.cc/uploads/d5.png "管理端界面.png")
+## 鸣谢
+    laravel 框架
+    workerman https://github.com/walkor/Workerman.git
+    vue-element-admin https://github.com/PanJiaChen/vue-element-admin.git

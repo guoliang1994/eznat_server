@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-use Illuminate\Support\Facades\DB;
-
 class Map extends Base
 {
     public function client()

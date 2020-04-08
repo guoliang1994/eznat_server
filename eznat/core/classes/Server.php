@@ -26,6 +26,9 @@ class Server extends WorkerWithCallback implements WorkerInterface
         $connection->lastMsgTime = time();
         if ($connection->isWeb) {
             preg_match("/Host:\s.*/i", serialize($data), $match);
+            if (empty($match)) {
+                return;
+            }
             $domain = preg_replace("/host:\s*/i", "", str_replace("\r", "", $match[0]));
             $webMap = new WebMap();
             $mapInfo = $webMap->joinRelationTable()

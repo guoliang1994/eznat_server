@@ -25,7 +25,7 @@ class WebMap extends FormRequest
     {
         return [
             'client_id' => 'required|numeric',
-            'domain' => 'required|url',
+            'domain' => 'required',
             'local_ip' => 'required|ipv4',
             'local_port' => 'required|numeric|max:65535',
         ];
