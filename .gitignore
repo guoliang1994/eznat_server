@@ -1,6 +1,9 @@
 /node_modules
 /public/hot
+/public/dist
+/public/uploads
 /public/storage
+/eznat/port_map_server
 /storage/*.key
 /vendor
 .env
