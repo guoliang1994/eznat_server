@@ -26,7 +26,7 @@ class Map extends FormRequest
         return [
             'name' => 'required|max:32',
             'remote_port' => 'required|numeric|notIn:80,443|min:1025|max:65535',
-            'local_ip' => 'required|ipv4',
+            'local_ip' => 'required',
             'local_port' => 'required|numeric|max:65535',
             'client_id' => 'required|numeric',
         ];

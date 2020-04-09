@@ -25,6 +25,6 @@ $web = new Server("tcp://0.0.0.0:80" );
 $httpsWeb = new Server("tcp://0.0.0.0:443" );
 $web->name = "web";
 $httpsWeb->name = "https_web";
-$channelServer = new ChannelServer("0.0.0.0", CHANNEL_PORT);
+$channelServer = new ChannelServer("0.0.0.0", env('CHANNEL_PORT'));
 
 Worker::runAll();

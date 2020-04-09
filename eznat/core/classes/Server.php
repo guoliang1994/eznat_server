@@ -27,6 +27,7 @@ class Server extends WorkerWithCallback implements WorkerInterface
         if ($connection->isWeb) {
             preg_match("/Host:\s.*/i", serialize($data), $match);
             if (empty($match)) {
+                $connection->close();
                 return;
             }
             $domain = preg_replace("/host:\s*/i", "", str_replace("\r", "", $match[0]));
@@ -111,7 +112,7 @@ class Server extends WorkerWithCallback implements WorkerInterface
 
     function onWorkerStart($worker)
     {
-        ChannelClient::connect("10.20.1.80", CHANNEL_PORT);
+        ChannelClient::connect(env('CHANNEL_IP'), env('CHANNEL_PORT'));
         // 客户端上线
         ChannelClient::on("EV_IN_CLIENT_ONLINE", function ($client) {
             if (!isset(self::$inClientList[$client['data_bus']])) {

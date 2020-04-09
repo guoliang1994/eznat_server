@@ -11,8 +11,6 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-const CHANNEL_PORT = 9918;
-
 $configPath =  include_once $app->configPath() . "/database.php";
 $conf = new Illuminate\Config\Repository($configPath);
 $databaseConfig = $conf->get("connections.mysql");

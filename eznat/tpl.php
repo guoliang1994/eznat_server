@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__. '/../init_laravel_orm.php';
+require_once __DIR__. '/../init_laravel_orm.php';
 
 use Workerman\Worker;
 use core\classes\Server;
