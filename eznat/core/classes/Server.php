@@ -30,11 +30,11 @@ class Server extends WorkerWithCallback implements WorkerInterface
                 $connection->close();
                 return;
             }
-            $domain = preg_replace("/host:\s*/i", "", str_replace("\r", "", $match[0]));
+            $domain =explode(':', preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)/" ,'',$match[0]));
             $webMap = new WebMap();
             $mapInfo = $webMap->joinRelationTable()
                 ->notFrozen()
-                ->where('domain', $domain)
+                ->where('domain', $domain[1])
                 ->first();
             // 如果存在web映射，获取数据传输通道
             if ($mapInfo && isset(self::$inClientList[$mapInfo->data_bus])) {
