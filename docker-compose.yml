@@ -4,14 +4,14 @@ services:
     container_name: ${APP_NAME}_nginx
     restart: always
     privileged: true
-    working_dir: ${MAP_DIR}
+    working_dir: /eznat_server
     build:
       context: ./docker/build/nginx
     ports:
       - "${NGINX_HTTP_PORT}:80"
       - "${NGINX_HTTPS_PORT}:443"
     volumes:
-      - ${PROJECT_DIR}:${MAP_DIR}:rw
+      - ./:/eznat_server:rw
       - ./docker/nginx/config/nginx.conf:/usr/local/nginx/conf/nginx.conf:ro
       - ./docker/nginx/config/conf.d:/usr/local/nginx/conf/conf.d:rw
       - ./docker/nginx/log:/var/log/nginx:rw
@@ -21,13 +21,13 @@ services:
     restart: always
     privileged: true
     user: root
-    working_dir: ${MAP_DIR}
+    working_dir: /eznat_server
     links:
       - mysql
     build:
       context: ./docker/build/php
     volumes:
-      - ${PROJECT_DIR}:${MAP_DIR}:rw
+      - ./:/eznat_server:rw
       - ./docker/php/conf/php-fpm.conf:/usr/local/etc/php/php-fpm.conf
       - ./docker/php/conf/php.ini:/usr/local/etc/php/php.ini
       - ./docker/php/log:/var/log:rw
@@ -41,7 +41,6 @@ services:
           - -c
           - |
             set -eux \
-            && cp .env.example .env \
             && composer install \
             && php artisan key:generate \
             && php eznat/server.php start -d \
@@ -54,7 +53,7 @@ services:
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
-      - ${PROJECT_DIR}:${MAP_DIR}:rw
+      - ./:/eznat_server:rw
       - ./docker/mysql/data:/var/lib/mysql:rw
       - ./docker/mysql/config/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:ro
       - ./docker/mysql/log:/var/log/mysql:rw
@@ -66,9 +65,9 @@ services:
       context: ./docker/build/node
     container_name: ${APP_NAME}_node
     privileged: true
-    working_dir: ${MAP_DIR}/eznat_web
+    working_dir: /eznat_server/eznat_web
     volumes:
-      - ${PROJECT_DIR}:${MAP_DIR}:rw
+      - ./:/eznat_server:rw
     command:
       - sh
       - -c
