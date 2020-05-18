@@ -89,6 +89,11 @@
         <el-table-column label="本地端口">
           <template slot-scope="scope">{{ scope.row.local_port }}</template>
         </el-table-column>
+        <el-table-column label="使用流量">
+          <template slot-scope="scope">
+            {{ scope.row.o + scope.row.i }}M
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200" right>
           <template slot-scope="scope">
             <el-popover v-model="scope.row.visible" placement="right" width="auto">

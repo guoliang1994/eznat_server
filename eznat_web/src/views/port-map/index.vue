@@ -46,6 +46,7 @@
       >新增映射</el-button>
       <el-button size="mini" type="success" @click="patch('','restart', true)">全部启动</el-button>
       <el-button size="mini" type="warning" @click="patch('', 'stop', true)">全部停止</el-button>
+      <el-button size="mini" type="warning" @click="patch('', 'stop', true)">重启通道服务</el-button>
     </div>
     <!-- 查询框 -->
     <div class="search-box">
@@ -106,6 +107,11 @@
         <template slot-scope="scope">
           {{ scope.row.remote_port }} <i class="el-icon-refresh" />
           {{ scope.row.local_ip }}:{{ scope.row.local_port }}
+        </template>
+      </el-table-column>
+      <el-table-column label="使用流量">
+        <template slot-scope="scope">
+          {{ scope.row.o + scope.row.i }}M
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150">
