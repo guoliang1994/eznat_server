@@ -23,15 +23,15 @@
 ## 沟通交流
     QQ群：946192373
 ## 捐赠支持
-![支付宝](http://eznat.istiny.cc/uploads/zfb.png "支付宝.png")
-![支付宝](http://eznat.istiny.cc/uploads/wx.png "微信.png")
+![支付宝](http://eznat.istiny.cc:8000/uploads/zfb.png "支付宝.png")
+![支付宝](http://eznat.istiny.cc:8000/uploads/wx.png "微信.png")
 ## 后端web管理界面截图
-![登录界面](http://eznat.istiny.cc/uploads/d0.png "登录界面.png")
-![个人简介](http://eznat.istiny.cc/uploads/d1.png "个人简介.png")
-![输入图片说明](http://eznat.istiny.cc/uploads/d2.png "设备管理界面.png")
-![输入图片说明](http://eznat.istiny.cc/uploads/d3.png "用户管理界面.png")
-![输入图片说明](http://eznat.istiny.cc/uploads/d4.png "管理端界面.png")
-![输入图片说明](http://eznat.istiny.cc/uploads/d5.png "管理端界面.png")
+![登录界面](https://images.gitee.com/uploads/images/2020/0518/162217_a1158ba6_1026697.png "登录界面.png")
+![个人简介](https://images.gitee.com/uploads/images/2020/0518/162225_790f4612_1026697.png "个人简介.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/162230_8b8fae5b_1026697.png "设备管理界面.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/162238_72a78169_1026697.png "用户管理界面.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/162244_9e2726c9_1026697.png "管理端界面.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0518/162253_a1daaac6_1026697.png "管理端界面.png")
 ## 鸣谢
     laravel 框架
     workerman https://github.com/walkor/Workerman.git
