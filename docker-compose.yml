@@ -43,6 +43,7 @@ services:
             set -eux \
             && composer install \
             && php artisan key:generate \
+            && chown www-data:www-data * -R \
             && php eznat/server.php start -d \
             && php-fpm
   mysql:
