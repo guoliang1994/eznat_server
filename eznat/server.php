@@ -15,13 +15,13 @@ PortMap::where('id', '>', 0)->update(['is_online' => 0]); # 重置服务端状�
 
 $data = PortMap::all();
 foreach ($data as $port) {
-    if ($port['remote_port'] == 80 || $port['remote_port'] == 443) {
+    if ($port['remote_port'] == env("HTTP_MAP_SERVER_PORT") || $port['remote_port'] == env("HTTPS_MAP_SERVER_PORT")) {
         continue;
     }
     Manage::generateScriptFile($port);
 }
 
-$web = new Server("tcp://0.0.0.0:80" );
+$web = new Server("tcp://0.0.0.0::80");
 $httpsWeb = new Server("tcp://0.0.0.0:443" );
 $web->name = "web";
 $httpsWeb->name = "https_web";

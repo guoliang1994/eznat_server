@@ -47,6 +47,9 @@ class Server extends WorkerWithCallback implements WorkerInterface
                 return;
             }
         }
+
+        $this->recordIOFlow($connection, "i", strlen($data));
+
         $send['data'] = $data;
         $send['map_info'] = $connection->mapInfo;
         $send['channel'] = $connection->channel;
@@ -62,6 +65,7 @@ class Server extends WorkerWithCallback implements WorkerInterface
         ChannelClient::on("EV_IN_MSG" . $dataBus, function ($data) use ($connection){
             // 本地传回数据
             if (isset(self::$inConnectionChannel[$data['channel']])) {
+                $this->recordIOFlow($connection, "o", strlen($data['data']));
                 self::$inConnectionChannel[$data['channel']]->send($data['data']);
             }
         });
@@ -72,9 +76,18 @@ class Server extends WorkerWithCallback implements WorkerInterface
             }
         });
     }
+    protected function recordIOFlow($connection, $type, $length)
+    {
+        if ($connection->isWeb) {
+            WebMap::where('domain', $connection->mapInfo['domain'])->increment($type ,$length);
+        } else {
+            PortMap::where('remote_port', $connection->getLocalPort())->increment($type ,$length);
+        }
+    }
     // 一个内部穿透对应多个外部连接
     function onConnect($connection)
     {
+        $connection->maxSendBufferSize =  50 * 1024 *1024;
         $connection->isWeb = false;
         $connection->uniqid = uniqid(). rand(100, 999);
 

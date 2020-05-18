@@ -12,9 +12,6 @@ class User extends Base
     {
         return $this->hasManyThrough(PortMap::class, Client::class);
     }
-    public function scopeOfUser($query, $uid){
-        $query->where('id', '=', $uid);
-    }
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = md5($value);
