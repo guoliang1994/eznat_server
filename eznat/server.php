@@ -21,7 +21,7 @@ foreach ($data as $port) {
     Manage::generateScriptFile($port);
 }
 
-$web = new Server("tcp://0.0.0.0::80");
+$web = new Server("tcp://0.0.0.0:80");
 $httpsWeb = new Server("tcp://0.0.0.0:443" );
 $web->name = "web";
 $httpsWeb->name = "https_web";
