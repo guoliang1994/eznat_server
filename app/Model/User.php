@@ -16,4 +16,7 @@ class User extends Base
     {
         $this->attributes['password'] = md5($value);
     }
+    public function scopeNotFrozen($query) {
+        return $query->where('frozen', 0);
+    }
 }

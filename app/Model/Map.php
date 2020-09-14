@@ -8,10 +8,6 @@ class Map extends Base
     {
         return $this->belongsTo(Client::class);
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
     public function scopeJoinRelationTable($query){
         return $query->join("client", "client_id", "=", "client.id")
             ->join("user", "user_id", "=", "user.id")
@@ -29,8 +25,5 @@ class Map extends Base
     }
     public function scopeOfClient($query, $clientId) {
         return $query->where('client_id', $clientId);
-    }
-    public function scopeNotFrozen($query) {
-        return $query->where('frozen', 0);
     }
 }

@@ -45,12 +45,18 @@ class Server extends WorkerWithCallback implements WorkerInterface
             }
             $domain =explode(':', preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)/" ,'',$match[0]));
             $webMap = new WebMap();
-            $mapInfo = $webMap->joinRelationTable()
-                ->notFrozen()
+            $mapInfo = $webMap
+                ->with(['client' => function($query) {
+                    $query->select('id', 'data_bus');
+                }])
+                ->whereHas('client.user', function($user) {
+                    $user->notFrozen();
+                })
                 ->where('domain', $domain[1])
+                ->select('domain', 'local_ip', 'local_port', 'client_id')
                 ->first();
             // 如果存在web映射，获取数据传输通道
-            if ($mapInfo && isset(self::$inClientList[$mapInfo->data_bus])) {
+            if ($mapInfo && isset(self::$inClientList[$mapInfo->client->data_bus])) {
                 $this->setInMsgListen($connection, $mapInfo);
                 $connectData['map_info'] = $connection->mapInfo;
                 $connectData['channel'] = $connection->channel;
