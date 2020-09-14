@@ -23,9 +23,22 @@ class Server extends WorkerWithCallback implements WorkerInterface
 
     function onMessage($connection, $data)
     {
+        $serializeData = serialize($data);
         $connection->lastMsgTime = time();
         if ($connection->isWeb) {
-            preg_match("/Host:\s.*/i", serialize($data), $match);
+            $connection->data .= $data;
+            preg_match("/Content-Length:\s*\d*/i", $serializeData, $contentLength);
+            if (!empty($contentLength)) {
+                $length = (int) str_replace("Content-Length: ", '', $contentLength[0]);
+                preg_match("/\{.*/", $data, $content); //post 传递的参数，json格式
+                $connection->receveContentLength += strlen($content[0]);
+                if ($length > $connection->receveContentLength) {
+                    echo "\r\n数据包不完整，继续接受数据";
+                    return;
+                }
+            }
+            $data = $connection->data;
+            preg_match("/Host:\s.*/i", $serializeData, $match);
             if (empty($match)) {
                 $connection->close();
                 return;
@@ -47,10 +60,8 @@ class Server extends WorkerWithCallback implements WorkerInterface
                 return;
             }
         }
-
         $this->recordIOFlow($connection, "i", strlen($data));
-
-        $send['data'] = $data;
+        $send['data'] = base64_encode($data);
         $send['map_info'] = $connection->mapInfo;
         $send['channel'] = $connection->channel;
         ChannelClient::publish("EV_OUT_MSG" . $connection->dataBus, $send);
@@ -60,13 +71,13 @@ class Server extends WorkerWithCallback implements WorkerInterface
         $dataBus = $mapInfo->client->data_bus;
         $connection->dataBus = $dataBus;
         $connection->mapInfo = $mapInfo->toArray();
-        $connection->channel = $dataBus . $mapInfo->local_ip . $mapInfo->local_port . rand(1, 100);
+        $connection->channel = $dataBus . $mapInfo->local_ip . $mapInfo->local_port ."_" . uniqid("_", true);
         self::$inConnectionChannel[$connection->channel] = $connection;
         ChannelClient::on("EV_IN_MSG" . $dataBus, function ($data) use ($connection){
             // 本地传回数据
             if (isset(self::$inConnectionChannel[$data['channel']])) {
                 $this->recordIOFlow($connection, "o", strlen($data['data']));
-                self::$inConnectionChannel[$data['channel']]->send($data['data']);
+                self::$inConnectionChannel[$data['channel']]->send(base64_decode($data['data']));
             }
         });
         ChannelClient::on("EV_IN_CLOSE" . $dataBus, function ($channel) use ($connection){
@@ -87,17 +98,22 @@ class Server extends WorkerWithCallback implements WorkerInterface
     // 一个内部穿透对应多个外部连接
     function onConnect($connection)
     {
-        $connection->maxSendBufferSize =  50 * 1024 *1024;
+        echo "外部连接进来";
+
+        $connection->maxSendBufferSize =  50 * 1024 * 1024;
+        $connection->maxPackageSize = 50 * 1024 * 1024;
         $connection->isWeb = false;
         $connection->uniqid = uniqid(). rand(100, 999);
 
         $remotePort = $connection->getLocalPort();
-        if ($remotePort == 80 || $remotePort == 443) {
+        if ($remotePort == env("HTTP_MAP_SERVER_PORT") || $remotePort == env("HTTPS_MAP_SERVER_PORT")) {
             $connection->isWeb = true;
+            $connection->receveContentLength = 0; // tcp会分包
+            $connection->data = "";
             return;
         }
 
-        $mapInfo = PortMap::where('remote_port', $remotePort)->first();
+        $mapInfo = PortMap::where('remote_port', $remotePort)->select('local_ip', 'local_port', 'client_id')->first();
         if (!empty($mapInfo)) {
             $this->setInMsgListen($connection, $mapInfo);
             $connectData['map_info'] = $connection->mapInfo;
@@ -115,6 +131,8 @@ class Server extends WorkerWithCallback implements WorkerInterface
     function onClose($connection)
     {
         if (isset($connection->channel)) {
+            $data['channel'] = $connection->channel;
+            ChannelClient::publish("EV_OUT_CLOSE" .$connection->dataBus, $data);
             unset(self::$inConnectionChannel[$connection->channel]);
         }
     }
@@ -140,9 +158,9 @@ class Server extends WorkerWithCallback implements WorkerInterface
             }
         });
         // 客户端在线监测
-        Timer::add(3, function (){
+        Timer::add(5, function (){
             foreach (self::$inClientList as $dataBus => $client) {
-                if (time() - $client['time'] > 3) {
+                if (time() - $client['time'] > 10) {
                     Client::where('data_bus', '=', $dataBus)->update(['is_online' => 0]);
                     unset(self::$inClientList[$dataBus]);
                 }

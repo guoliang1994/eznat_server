@@ -21,10 +21,9 @@ foreach ($data as $port) {
     Manage::generateScriptFile($port);
 }
 
-$web = new Server("tcp://0.0.0.0:80");
-$httpsWeb = new Server("tcp://0.0.0.0:443" );
+$web = new Server("tcp://0.0.0.0:" . env("HTTP_MAP_SERVER_PORT"));
+$httpsWeb = new Server("tcp://0.0.0.0:" .env("HTTPS_MAP_SERVER_PORT") );
 $web->name = "web";
 $httpsWeb->name = "https_web";
-$channelServer = new ChannelServer("0.0.0.0", env('CHANNEL_PORT'));
 
 Worker::runAll();
