@@ -1,4 +1,5 @@
 <?php
+
 namespace core\classes;
 
 use App\Model\Client;
@@ -16,6 +17,7 @@ class Server extends WorkerWithCallback implements WorkerInterface
      */
     private static $inConnectionChannel = [];
     private static $inClientList = [];
+
     public function __construct($socket_name = '', $context_option = array())
     {
         parent::__construct($socket_name, $context_option);
@@ -23,33 +25,35 @@ class Server extends WorkerWithCallback implements WorkerInterface
 
     function onMessage($connection, $data)
     {
-        $serializeData = serialize($data);
         $connection->lastMsgTime = time();
         if ($connection->isWeb) {
             $connection->data .= $data;
-            preg_match("/Content-Length:\s*\d*/i", $serializeData, $contentLength);
-            if (!empty($contentLength)) {
-                $length = (int) str_replace("Content-Length: ", '', $contentLength[0]);
-                preg_match("/\{.*/", $data, $content); //post 传递的参数，json格式
-                $connection->receveContentLength += strlen($content[0]);
-                if ($length > $connection->receveContentLength) {
+            preg_match("/Content-Length:\s*\d*/i", $connection->data, $paramsLength);
+            $headerEnd = \strpos($connection->data, "\r\n\r\n");
+            $headerLength = strlen(substr($connection->data, 0, $headerEnd));
+            if (!empty($paramsLength)) {
+                $connection->totalContentLength = (int)str_replace("Content-Length: ", '', $paramsLength[0]);
+                echo "总的数据包长度：{ $connection->totalContentLength }";
+                $connection->receveContentLength += strlen($data);
+                echo "接收到的数据包长度： " . ($connection->receveContentLength - $headerLength - 4);
+                if ($connection->totalContentLength > $connection->receveContentLength) {
                     echo "\r\n数据包不完整，继续接受数据";
                     return;
                 }
             }
             $data = $connection->data;
-            preg_match("/Host:\s.*/i", $serializeData, $match);
+            preg_match("/Host:\s.*/i", serialize($connection->data), $match);
             if (empty($match)) {
                 $connection->close();
                 return;
             }
-            $domain =explode(':', preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)/" ,'',$match[0]));
+            $domain = explode(':', preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)/", '', $match[0]));
             $webMap = new WebMap();
             $mapInfo = $webMap
-                ->with(['client' => function($query) {
+                ->with(['client' => function ($query) {
                     $query->select('id', 'data_bus');
                 }])
-                ->whereHas('client.user', function($user) {
+                ->whereHas('client.user', function ($user) {
                     $user->notFrozen();
                 })
                 ->where('domain', $domain[1])
@@ -62,6 +66,7 @@ class Server extends WorkerWithCallback implements WorkerInterface
                 $connectData['channel'] = $connection->channel;
                 ChannelClient::publish("EV_OUT_CONNECT" . $connection->dataBus, $connectData);
             } else {
+                // die('站点错误');
                 $connection->close();
                 return;
             }
@@ -71,50 +76,58 @@ class Server extends WorkerWithCallback implements WorkerInterface
         $send['map_info'] = $connection->mapInfo;
         $send['channel'] = $connection->channel;
         ChannelClient::publish("EV_OUT_MSG" . $connection->dataBus, $send);
+
+        $connection->receveContentLength = 0;
+        $connection->totalContentLength = 0;
+        $connection->data = "";
     }
+
     private function setInMsgListen(&$connection, $mapInfo)
     {
         $dataBus = $mapInfo->client->data_bus;
         $connection->dataBus = $dataBus;
         $connection->mapInfo = $mapInfo->toArray();
-        $connection->channel = $dataBus . $mapInfo->local_ip . $mapInfo->local_port ."_" . uniqid("_", true);
+        $connection->channel = $dataBus . $mapInfo->local_ip . $mapInfo->local_port . "_" . uniqid("_", true);
         self::$inConnectionChannel[$connection->channel] = $connection;
-        ChannelClient::on("EV_IN_MSG" . $dataBus, function ($data) use ($connection){
+        ChannelClient::on("EV_IN_MSG" . $dataBus, function ($data) use ($connection) {
             // 本地传回数据
             if (isset(self::$inConnectionChannel[$data['channel']])) {
                 $this->recordIOFlow($connection, "o", strlen($data['data']));
                 self::$inConnectionChannel[$data['channel']]->send(base64_decode($data['data']));
             }
         });
-        ChannelClient::on("EV_IN_CLOSE" . $dataBus, function ($channel) use ($connection){
+        ChannelClient::on("EV_IN_CLOSE" . $dataBus, function ($channel) use ($connection) {
             if (isset(self::$inConnectionChannel[$channel])) {
                 self::$inConnectionChannel[$channel]->close();
                 unset(self::$inConnectionChannel[$channel]);
             }
         });
     }
+
     protected function recordIOFlow($connection, $type, $length)
     {
         if ($connection->isWeb) {
-            WebMap::where('domain', $connection->mapInfo['domain'])->increment($type ,$length);
+            WebMap::where('domain', $connection->mapInfo['domain'])->increment($type, $length);
         } else {
-            PortMap::where('remote_port', $connection->getLocalPort())->increment($type ,$length);
+            PortMap::where('remote_port', $connection->getLocalPort())->increment($type, $length);
         }
     }
+
     // 一个内部穿透对应多个外部连接
     function onConnect($connection)
     {
         echo "外部连接进来";
 
-        $connection->maxSendBufferSize =  50 * 1024 * 1024;
+        $connection->maxSendBufferSize = 50 * 1024 * 1024;
         $connection->maxPackageSize = 50 * 1024 * 1024;
         $connection->isWeb = false;
-        $connection->uniqid = uniqid(). rand(100, 999);
+        $connection->uniqid = uniqid() . rand(100, 999);
 
         $remotePort = $connection->getLocalPort();
         if ($remotePort == env("HTTP_MAP_SERVER_PORT") || $remotePort == env("HTTPS_MAP_SERVER_PORT")) {
             $connection->isWeb = true;
             $connection->receveContentLength = 0; // tcp会分包
+            $connection->totalContentLength = 0; // tcp会分包
             $connection->data = "";
             return;
         }
@@ -124,12 +137,13 @@ class Server extends WorkerWithCallback implements WorkerInterface
             $this->setInMsgListen($connection, $mapInfo);
             $connectData['map_info'] = $connection->mapInfo;
             $connectData['channel'] = $connection->channel;
-            ChannelClient::publish("EV_OUT_CONNECT" .$connection->dataBus, $connectData);
+            ChannelClient::publish("EV_OUT_CONNECT" . $connection->dataBus, $connectData);
         } else {
             $connection->close();
             return;
         }
     }
+
     /*
      * 外部连接，有两种关闭方式。1，主动关闭，2超时关闭
      * 如果是外部连接主动关闭，则会调用此方法。
@@ -138,12 +152,13 @@ class Server extends WorkerWithCallback implements WorkerInterface
     {
         if (isset($connection->channel)) {
             $data['channel'] = $connection->channel;
-            ChannelClient::publish("EV_OUT_CLOSE" .$connection->dataBus, $data);
+            ChannelClient::publish("EV_OUT_CLOSE" . $connection->dataBus, $data);
             unset(self::$inConnectionChannel[$connection->channel]);
         }
     }
 
-    function onError($connection, $code, $msg){
+    function onError($connection, $code, $msg)
+    {
         self::log($msg);
     }
 
@@ -164,7 +179,7 @@ class Server extends WorkerWithCallback implements WorkerInterface
             }
         });
         // 客户端在线监测
-        Timer::add(5, function (){
+        Timer::add(5, function () {
             foreach (self::$inClientList as $dataBus => $client) {
                 if (time() - $client['time'] > 10) {
                     Client::where('data_bus', '=', $dataBus)->update(['is_online' => 0]);
@@ -174,8 +189,19 @@ class Server extends WorkerWithCallback implements WorkerInterface
         });
     }
 
-    function onWorkerStop($worker){}
-    function onWorkerReload($worker){}
-    function onBufferFull($connection){}
-    function onBufferDrain($connection){}
+    function onWorkerStop($worker)
+    {
+    }
+
+    function onWorkerReload($worker)
+    {
+    }
+
+    function onBufferFull($connection)
+    {
+    }
+
+    function onBufferDrain($connection)
+    {
+    }
 }
