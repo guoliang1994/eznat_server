@@ -7,7 +7,7 @@
 
 ### 如何使用
 [点击查看安装文档](https://gitee.com/FYDEV/eznat_server/wikis/pages)
-
+[作者线上经营，注册送200M体验流量，点击前往](http://nwct.istiny.cc)
     1.服务端支持linux，windows
     2.客户端理论上支持所有可以运行PHP的操作系统，目前只测试了windows和linux
     
