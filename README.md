@@ -4,10 +4,10 @@
 **docker-compose 一键启动服务端。** 
 
 **兄弟别只顾着fork代码，给个star先。**
-
+### 立即体验穿透效果
+[作者线上经营，注册送200M体验流量，点击前往](http://nwct.istiny.cc)
 ### 如何使用
 [点击查看安装文档](https://gitee.com/FYDEV/eznat_server/wikis/pages)
-[作者线上经营，注册送200M体验流量，点击前往](http://nwct.istiny.cc)
     1.服务端支持linux，windows
     2.客户端理论上支持所有可以运行PHP的操作系统，目前只测试了windows和linux
     
