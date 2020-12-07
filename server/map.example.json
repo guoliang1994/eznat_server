@@ -1,0 +1,18 @@
+{
+  "webMap": [
+    {
+      "domain": "www.text.com",
+      "local_ip": "10.20.1.82",
+      "local_port": 8015,
+      "data_bus": "FDQWEDX"
+    }
+  ],
+  "portMap": [
+    {
+      "remote_port": 9944,
+      "local_ip": "10.20.1.82",
+      "local_port": 3306,
+      "data_bus": "FDQWEDX"
+    }
+  ]
+}

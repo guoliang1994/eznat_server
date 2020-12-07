@@ -1,9 +1,0 @@
-.env
-web/*
-log
-tools/backup
-.idea
-mysql/data
-mysql/backup
-
-solr/data
