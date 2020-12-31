@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + WS协议支持，对应的 WSS 也应该支持
 + 增加真正可独立运行的php环境。
 
+## 2020/12/31 14:14 周四 v4.0.1
+### Fixed
++ 修复配置文件读取路径错误
+
 ## 2020/12/02 16:16 周三 v4.0.0
 ### Changed
 - 删除web界面控制，这就意味着不需要安装nginx
